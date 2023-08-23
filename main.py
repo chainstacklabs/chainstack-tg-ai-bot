@@ -31,7 +31,7 @@ retriever.search_kwargs.update({
     'maximal_marginal_relevance': True,
     'k': 10,
 })
-model = ChatOpenAI(streaming=True, callbacks=[StreamingStdOutCallbackHandler()], model_name=os.getenv('LANGUAGE_MODEL'), temperature=0.0)
+model = ChatOpenAI(streaming=False, callbacks=[StreamingStdOutCallbackHandler()], model_name=os.getenv('LANGUAGE_MODEL'), temperature=0.0)
 qa = ConversationalRetrievalChain.from_llm(model, retriever=retriever, return_source_documents=True)
 
 # Commands
@@ -65,10 +65,11 @@ def handle_response(text: str) -> str:
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message_type: str = update.message.chat.type
     text: str = update.message.text
-
-    print(f'User in {message_type} asks: {text}')
-
-    if message_type == 'group':
+    user_id = update.message.chat.id
+    user_data = update.message.chat
+    print(f'User {user_id} in {message_type} asks: {text}')
+    print(user_data)
+    if message_type == 'group' or message_type == 'supergroup':
         if BOT_USERNAME in text:
             new_text: str = text.replace(BOT_USERNAME, '').strip()
             response: str = handle_response(new_text)
@@ -77,7 +78,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         response: str = handle_response(text)
 
-    print('Bot response:', response)
+    #print('Bot response:', response)
     await update.message.reply_text(response)
 
 async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
