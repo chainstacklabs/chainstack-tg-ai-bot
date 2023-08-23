@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# venv
+chainstack-tg/
+
+# Vector DB
+chainstack_docs/
 # C extensions
 *.so
 
