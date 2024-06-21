@@ -24,7 +24,7 @@ h11==0.14.0
 httpcore==0.17.3
 httpx==0.24.1
 humbug==0.3.2
-idna==3.4
+idna==3.7
 jmespath==1.0.1
 langchain==0.0.271
 langsmith==0.0.26
